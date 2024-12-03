@@ -1,0 +1,37 @@
+version: "3.9"
+
+x-env:
+  &default-env
+  env_file: env/.env
+
+services:
+  pg:
+    <<: *default-env
+    image: postgres:16.6-bookworm
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - db-access
+
+  webapp:
+    <<: *default-env
+    build:
+      context: .
+      dockerfile: ci-cd/webapp.Dockerfile
+    volumes:
+      - ./src/backend/webapp/:/app/webapp/
+    ports:
+      - 8000:8000
+    depends_on:
+      - pg
+    networks:
+      - db-access
+
+volumes:
+  postgres_data:
+
+networks:
+  db-access:
