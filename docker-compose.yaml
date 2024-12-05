@@ -20,7 +20,7 @@ services:
     <<: *default-env
     build:
       context: .
-      dockerfile: ci-cd/webapp.Dockerfile
+      dockerfile: ci-cd/webapp.dockerfile
     volumes:
       - ./src/backend/webapp/:/app/webapp/
     ports:
